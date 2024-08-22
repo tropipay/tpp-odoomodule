@@ -12,7 +12,7 @@
                            attrs="{'required': [('code', '=', 'tpp'), ('state', '!=', 'disabled')]}"/>
 					 <field name="client_secret"
                            string="Client Secret"
-                           attrs="{'required': [('code', '=', 'tpp'), ('state', '!=', 'disabled')]}"/>	   
+                           attrs="{'required': [('code', '=', 'tpp'), ('state', '!=', 'disabled')]}"/>
                 </group>
             </group>
         </field>

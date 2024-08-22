@@ -6,6 +6,10 @@
                file="tpp_payment_gateway/static/description/tropipaylogo.png"/>
         <field name="company_id" ref="base.main_company"/>
         <field name="redirect_form_view_id" ref="redirect_form"/>
+        <field name="pre_msg">
+            <![CDATA[
+        <p>Serás redirigido a la pasarela de Tropipay después de finalizar tu compra.</p>]]>
+        </field>
     </record>
 
 </odoo>
