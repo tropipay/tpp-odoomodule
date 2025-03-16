@@ -5,7 +5,9 @@
         <field name="image_128" type="base64"
                file="tpp_payment_gateway/static/description/tropipaylogo.png"/>
         <field name="company_id" ref="base.main_company"/>
-        <field name="redirect_form_view_id" ref="redirect_form"/>
+        <field name="redirect_form_view_id" ref="tpp_payment_gateway.redirect_form"/>
+        <field name="module_id" ref="base.module_tpp_payment_gateway"/>
+        <field name="display_name">TropiPay</field>
     </record>
 
 </odoo>

@@ -2,10 +2,7 @@
 <odoo>
 
     <template id="redirect_form">
-        <form t-att-action="api_url" method="post">
-            <input type="hidden" name="csrf_token"
-                   t-att-value="request.csrf_token()"/>
-        </form>
+        <form t-att-action="api_url" method="post"/>
     </template>
 
 </odoo>

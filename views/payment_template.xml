@@ -10,9 +10,13 @@
                     <field name="client_id"
                            string="Client Id"
                            attrs="{'required': [('code', '=', 'tpp'), ('state', '!=', 'disabled')]}"/>
-					 <field name="client_secret"
+                    <field name="client_secret"
                            string="Client Secret"
-                           attrs="{'required': [('code', '=', 'tpp'), ('state', '!=', 'disabled')]}"/>	   
+                           attrs="{'required': [('code', '=', 'tpp'), ('state', '!=', 'disabled')]}"/>
+                    <field name="tpp_payment_method"
+                           attrs="{'required': [('code', '=', 'tpp'), ('state', '!=', 'disabled')]}"/>
+                    <field name="tpp_currency_id"
+                           attrs="{'required': [('code', '=', 'tpp'), ('state', '!=', 'disabled')]}"/>
                 </group>
             </group>
         </field>
