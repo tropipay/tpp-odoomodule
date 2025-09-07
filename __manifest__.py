@@ -19,6 +19,7 @@
     'website': "https://www.tropipay.com",
     'depends': ['payment', 'account', 'website', 'website_sale'],
     'data': [
+        'data/payment_icon_data.xml',
         'data/payment_method_data.xml',
         'views/payment_template.xml',
         'views/payment_tpp_templates.xml',
