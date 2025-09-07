@@ -1,0 +1,8 @@
+<odoo>
+    <!-- Create a payment icon for TropiPay -->
+    <record id="payment_icon_tpp" model="payment.icon">
+        <field name="name">TropiPay</field>
+        <field name="image" type="base64" file="tpp-odoomodule/static/description/tropipaylogo.png"/>
+        <field name="provider" eval="False"/>
+    </record>
+</odoo>
