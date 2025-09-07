@@ -4,5 +4,6 @@
         <field name="name">TropiPay</field>
         <field name="code">tpp_card</field>
         <field name="sequence" eval="50"/>
+        <field name="image" type="base64" file="tpp-odoomodule/static/description/tropipaylogo.png"/>
     </record>
 </odoo>

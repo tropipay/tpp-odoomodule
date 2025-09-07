@@ -13,6 +13,26 @@
                 <input type="hidden" name="csrf_token"
                        t-att-value="request.csrf_token()"/>
             </form>
+            <!-- Estilos mínimos inline para asegurar visibilidad inmediata -->
+            <style>
+            .o_tpp_redirect_wrapper { display:flex; align-items:center; justify-content:center; min-height:50vh; }
+            .o_tpp_redirect_content { text-align:center; }
+            .o_tpp_redirect_logo { height: 96px; width:auto; margin-bottom: 12px; }
+            .o_tpp_redirect_text { font-size: 16px; color: #555; }
+            </style>
+            <!-- Enviar el formulario automáticamente tras un pequeño retraso -->
+            <script type="text/javascript">
+            (function(){
+                setTimeout(function(){
+                    var form = document.currentScript && document.currentScript.previousElementSibling;
+                    if(form && form.tagName === 'FORM') { form.submit(); }
+                    else {
+                        var f = document.querySelector('.o_tpp_redirect_wrapper form');
+                        if (f) { f.submit(); }
+                    }
+                }, 400);
+            })();
+            </script>
         </div>
     </template>
 
