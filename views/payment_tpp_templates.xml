@@ -2,21 +2,18 @@
 <odoo>
 
     <template id="redirect_form">
-        <form t-att-action="api_url" method="post">
-            <input type="hidden" name="csrf_token"
-                   t-att-value="request.csrf_token()"/>
-        </form>
-    </template>
-
-    <!-- Añadir logo a la izquierda del nombre del método en el checkout -->
-    <template id="payment_tpp_provider_icon" inherit_id="payment.payment_method_line" name="TPP icon on payment method">
-        <xpath expr=".//label/span" position="before">
-            <t t-if="payment_method_line.provider_id.code == 'tpp'">
-                <span class="o_payment_provider_icon_tpp">
-                    <img t-att-src="'/tpp-odoomodule/static/description/tropipaylogo.png'" alt="TropiPay"/>
-                </span>
-            </t>
-        </xpath>
+        <div class="o_tpp_redirect_wrapper">
+            <div class="o_tpp_redirect_content">
+                <img class="o_tpp_redirect_logo" t-att-src="'/tpp-odoomodule/static/description/tropipaylogo.png'" alt="TropiPay"/>
+                <div class="o_tpp_redirect_text">
+                    <t>Conectando con TropiPay…</t>
+                </div>
+            </div>
+            <form t-att-action="api_url" method="post">
+                <input type="hidden" name="csrf_token"
+                       t-att-value="request.csrf_token()"/>
+            </form>
+        </div>
     </template>
 
 </odoo>
