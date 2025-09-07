@@ -32,5 +32,10 @@
     'installable': True,
     'application': False,
     'auto_install': False,
+    'assets': {
+        'web.assets_frontend': [
+            'tpp-odoomodule/static/src/scss/tpp_payment.scss',
+        ],
+    },
 }
 

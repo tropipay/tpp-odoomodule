@@ -8,4 +8,15 @@
         </form>
     </template>
 
+    <!-- Añadir logo a la izquierda del nombre del método en el checkout -->
+    <template id="payment_tpp_provider_icon" inherit_id="payment.payment_method_line" name="TPP icon on payment method">
+        <xpath expr=".//label/span" position="before">
+            <t t-if="payment_method_line.provider_id.code == 'tpp'">
+                <span class="o_payment_provider_icon_tpp">
+                    <img t-att-src="'/tpp-odoomodule/static/description/tropipaylogo.png'" alt="TropiPay"/>
+                </span>
+            </t>
+        </xpath>
+    </template>
+
 </odoo>
