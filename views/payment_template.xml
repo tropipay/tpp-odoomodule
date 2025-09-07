@@ -6,13 +6,9 @@
         <field name="inherit_id" ref="payment.payment_provider_form"/>
         <field name="arch" type="xml">
             <group name="provider_credentials" position='inside'>
-                <group attrs="{'invisible': [('code', '!=', 'tpp')]}">
-                    <field name="client_id"
-                           string="Client Id"
-                           attrs="{'required': [('code', '=', 'tpp'), ('state', '!=', 'disabled')]}"/>
-					 <field name="client_secret"
-                           string="Client Secret"
-                           attrs="{'required': [('code', '=', 'tpp'), ('state', '!=', 'disabled')]}"/>	   
+                <group>
+                    <field name="client_id" string="Client Id"/>
+                    <field name="client_secret" string="Client Secret"/>
                 </group>
             </group>
         </field>

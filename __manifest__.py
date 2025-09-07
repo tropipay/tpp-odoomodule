@@ -10,15 +10,16 @@
 {
     'name': 'Tropipay Payment Gateway',
     'category': 'Accounting/Payment Acquirers',
-    'version': '1.3.0.0.0',
-    'description': """Tropipay Payment Gateway V1.3""",
-    'Summary': """Tropipay Payment Gateway V1.3""",
+    'version': '1.4.0',
+    'description': """Tropipay Payment Gateway for Odoo 17""",
+    'summary': """Tropipay Payment Gateway for Odoo 17""",
     'author': "TropiPay",
     'company': 'TropiPay',
     'maintainer': 'Tropipay',
     'website': "https://www.tropipay.com",
     'depends': ['payment', 'account', 'website', 'website_sale'],
     'data': [
+        'data/payment_method_data.xml',
         'views/payment_template.xml',
         'views/payment_tpp_templates.xml',
         #'views/tpp_payment_template.xml',
@@ -29,6 +30,7 @@
     'images': ['static/description/tropipaylogo.png'],
     'license': 'LGPL-3',
     'installable': True,
-    'application': True,
+    'application': False,
     'auto_install': False,
 }
+

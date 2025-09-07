@@ -1,11 +1,15 @@
 <odoo>
-    <record id="payment_provider_upi" model="payment.provider">
+    <record id="payment_provider_tpp" model="payment.provider">
         <field name="name">Tpp</field>
         <field name="code">tpp</field>
         <field name="image_128" type="base64"
-               file="tpp_payment_gateway/static/description/tropipaylogo.png"/>
+               file="tpp-odoomodule/static/description/tropipaylogo.png"/>
         <field name="company_id" ref="base.main_company"/>
         <field name="redirect_form_view_id" ref="redirect_form"/>
+        <field name="state">test</field>
+        <field name="website_id" ref="website.default_website"/>
+        <!-- Activar explícitamente los métodos soportados -->
+        <field name="payment_method_ids" eval="[(6, 0, [ref('tpp-odoomodule.payment_method_tpp_card')])]"/>
     </record>
 
 </odoo>

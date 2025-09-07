@@ -75,12 +75,14 @@ class PaymentTransaction(models.Model):
         first_name = name_parts[0] if name_parts else ''
         last_name = ' '.join(name_parts[1:]) if len(name_parts) > 1 else '.'
 
+        # TropiPay espera monto en centavos; usar entero
+        amount_cents = int(round(amount * 100))
         payload = {
             "reference": self.reference,
             "concept": "Compra en la web",
             "favorite": False,
             "description": "Compra de productos en la tienda en linea",
-            "amount": round(amount * 100, 2),  # float(f"{self.amount}00"), #str(self.amount)+"00",
+            "amount": amount_cents,
             "currency": self.currency_id.name,
             "singleUse": True,
             "reasonId": 34,
@@ -107,45 +109,65 @@ class PaymentTransaction(models.Model):
         }
         _logger.info(endpoint_url)
         _logger.info(payload)
-        response = requests.post(endpoint_url, json=payload, headers=headers)
-        _logger.info("La URL corta obtenid es")
-        _logger.info(response)
-        _logger.info(response.json())
+        try:
+            response = requests.post(endpoint_url, json=payload, headers=headers, timeout=30)
+        except requests.RequestException as e:
+            _logger.exception("Error conectando con TropiPay")
+            raise ValidationError(_(f"No se pudo conectar con TropiPay: {e}"))
+        if not response.ok:
+            _logger.error("Respuesta HTTP no OK de TropiPay: %s - %s", response.status_code, response.text)
+            raise ValidationError(_(f"Error de TropiPay ({response.status_code}): {response.text}"))
+        try:
+            data = response.json()
+        except ValueError:
+            _logger.error("Respuesta de TropiPay no es JSON: %s", response.text)
+            raise ValidationError(_(f"Respuesta inválida de TropiPay"))
+        short_url = data.get("shortUrl")
+        payment_url = data.get("paymentUrl")
+        if not short_url and not payment_url:
+            _logger.error("Faltan URLs de pago en respuesta TropiPay: %s", data)
+            raise ValidationError(_(f"TropiPay no devolvió URL de pago"))
         rendering_values = {
-            'api_url': response.json()["shortUrl"],
-            'payment_url': response.json()["paymentUrl"],
+            'api_url': short_url or payment_url,
+            'payment_url': payment_url or short_url,
         }
         return rendering_values
 
 
     def _get_tx_from_notification_data(self, provider_code, notification_data):
         """Getting  payment status from tropipay"""
-        #notification_data_str = notification_data.decode('utf-8')
-        # Deserialize the JSON string
         tx = super()._get_tx_from_notification_data(provider_code, notification_data)
         if provider_code != 'tpp' or len(tx) == 1:
             return tx
-        notification_data_dict = json.loads(notification_data)
+        # En Odoo 17 podemos recibir un dict directamente (type='json')
+        if isinstance(notification_data, (bytes, str)):
+            try:
+                notification_data_dict = json.loads(notification_data)
+            except Exception:
+                notification_data_dict = {}
+        else:
+            notification_data_dict = notification_data or {}
         _logger.info("asdfasf: %s", notification_data_dict)
 
         # Access the payment_status field
-        payment_status = notification_data_dict['data']['state']
+        payment_status = (notification_data_dict.get('data') or {}).get('state')
         _logger.info("payment_status: %s", payment_status)
         # payment_status = notification_data['state'] #5 cuando el pago se realizo correctamente
         _logger.info("mi clientid: %s", self.env['payment.provider'].search([('code', '=', 'tpp')]).client_id)
         clientid = self.env['payment.provider'].search([('code', '=', 'tpp')]).client_id
         clientsecret = self.env['payment.provider'].search([('code', '=', 'tpp')]).client_secret
-        bankOrderCode = notification_data_dict['data']['bankOrderCode']
-        originalCurrencyAmount = notification_data_dict['data']['originalCurrencyAmount']
+        inner = notification_data_dict.get('data') or {}
+        bankOrderCode = inner.get('bankOrderCode')
+        originalCurrencyAmount = inner.get('originalCurrencyAmount')
         # Concatenar los valores
         data = "{}{}{}{}".format(bankOrderCode,clientid,clientsecret,originalCurrencyAmount)
 
         # Calcular la firma utilizando SHA256
-        signature = hashlib.sha256(data.encode()).hexdigest()
+        signature = hashlib.sha256(data.encode()).hexdigest() if all([bankOrderCode, clientid, clientsecret, originalCurrencyAmount]) else None
         _logger.info("misignature: {}".format(signature))
-        _logger.info("Firma remota: {}, Firma local: {}".format(notification_data_dict['data']['signaturev2'],signature))
-        reference = notification_data_dict['data']['reference']
-        if signature != notification_data_dict['data']['signaturev2']:
+        _logger.info("Firma remota: {}, Firma local: {}".format(inner.get('signaturev2'),signature))
+        reference = inner.get('reference')
+        if not signature or signature != inner.get('signaturev2'):
             raise ValidationError(
                 "tpp: " + _(
                     "Invalid Signature %s.",
@@ -169,8 +191,27 @@ class PaymentTransaction(models.Model):
         super()._process_notification_data(notification_data)
         if self.provider_code != 'tpp':
             return
-        else:
+        # Mapear estados de TropiPay
+        # Esperado: notification_data dict con clave 'data' y 'state'
+        inner = {}
+        try:
+            if isinstance(notification_data, (bytes, str)):
+                inner = (json.loads(notification_data) or {}).get('data') or {}
+            else:
+                inner = (notification_data or {}).get('data') or {}
+        except Exception:
+            inner = {}
+        state = inner.get('state')
+        # Considerar como pagado si state en {5, 'PAID', 'paid'}; cancelar si {3, 'CANCELLED', 'FAILED'}
+        paid_states = {5, 'PAID', 'paid', 'APPROVED', 'Approved'}
+        failed_states = {3, 'CANCELLED', 'FAILED', 'Canceled', 'Declined'}
+        if state in paid_states:
             self._set_done()
+        elif state in failed_states:
+            self._set_canceled()
+        else:
+            # Dejar pendiente si no se reconoce
+            _logger.info("Estado TropiPay no reconocido, se deja pendiente: %s", state)
 
     def _handle_notification_data(self, provider_code, notification_data):
 

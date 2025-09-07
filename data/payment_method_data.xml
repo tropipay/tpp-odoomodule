@@ -1,0 +1,8 @@
+<odoo>
+    <!-- Define a new payment method code specific for TropiPay in Odoo 17 -->
+    <record id="payment_method_tpp_card" model="payment.method">
+        <field name="name">TropiPay</field>
+        <field name="code">tpp_card</field>
+        <field name="sequence" eval="50"/>
+    </record>
+</odoo>

@@ -1,10 +1,10 @@
 TropiPay Payment Gateway
 ===========================
-* TropiPay Payment Gateway For Odoo 16
+* TropiPay Payment Gateway for Odoo 17
 
 Installation
 ============
-	- www.odoo.com/documentation/16.0/setup/install.html
+	- https://www.odoo.com/documentation/17.0/administration/install.html
 	- Install our custom addon
 
 License
@@ -19,7 +19,7 @@ Company
 Credits
 -------
 * Developer:
-(v16) developers@tropipay.com
+(v17) developers@tropipay.com
 
 
 Contacts

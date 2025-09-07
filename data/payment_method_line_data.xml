@@ -1,0 +1,12 @@
+<odoo>
+    <!-- Create a payment method line for TPP using the standard 'Card' method -->
+    <record id="payment_method_line_tpp_card" model="payment.method.line">
+        <field name="name">TropiPay Card</field>
+        <field name="provider_id" ref="tpp-odoomodule.payment_provider_tpp"/>
+        <field name="payment_method_id" ref="payment.payment_method_card"/>
+        <!-- Optional: leave website blank to be available globally; can be set in UI -->
+        <!-- <field name="website_id" ref="website.default_website"/> -->
+        <field name="sequence" eval="10"/>
+        <field name="active" eval="True"/>
+    </record>
+</odoo>

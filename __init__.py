@@ -14,9 +14,10 @@ from . import controllers
 from odoo.addons.payment import setup_provider, reset_payment_provider
 
 
-def post_init_hook(cr, registry):
-    setup_provider(cr, registry, 'tpp')
+def post_init_hook(env):
+    # Odoo 17 hooks reciben env
+    setup_provider(env, 'tpp')
 
-
-def uninstall_hook(cr, registry):
-    reset_payment_provider(cr, registry, 'tpp')
+def uninstall_hook(env):
+    # Odoo 17 hooks reciben env
+    reset_payment_provider(env, 'tpp')
