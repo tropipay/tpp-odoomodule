@@ -21,7 +21,7 @@
             .o_tpp_redirect_text { font-size: 16px; color: #555; }
             </style>
             <!-- Enviar el formulario automáticamente tras un pequeño retraso -->
-            <script type="text/javascript">
+            <script type="text/javascript"><![CDATA[
             (function(){
                 setTimeout(function(){
                     var form = document.currentScript && document.currentScript.previousElementSibling;
@@ -32,7 +32,7 @@
                     }
                 }, 400);
             })();
-            </script>
+            ]]></script>
         </div>
     </template>
 
