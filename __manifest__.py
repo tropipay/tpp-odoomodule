@@ -10,7 +10,7 @@
 {
     'name': 'Tropipay Payment Gateway',
     'category': 'Accounting/Payment Acquirers',
-    'version': '1.4.0',
+    'version': '1.4.1',
     'description': """Tropipay Payment Gateway for Odoo 17""",
     'summary': """Tropipay Payment Gateway for Odoo 17""",
     'author': "TropiPay",
